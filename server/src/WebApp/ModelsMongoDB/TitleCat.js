@@ -14,4 +14,4 @@ const CatSchema = mongoose.Schema(
   { versionKey: false }
 );
 
-module.exports = mongoose.model("catTitle", CatSchema);
+module.exports = mongoose.model("Category", CatSchema);

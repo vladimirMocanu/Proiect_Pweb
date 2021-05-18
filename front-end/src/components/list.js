@@ -19,12 +19,6 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 1800,
     paddingLeft: 20,
   },
-  //   demo: {
-  //     backgroundColor: theme.palette.background.paper,
-  //   },
-  //   title: {
-  //     margin: theme.spacing(4, 0, 2),
-  //   },
 }));
 
 export default function InteractiveList(link1) {
@@ -44,7 +38,7 @@ export default function InteractiveList(link1) {
 
   return (
     <div className={classes.root}>
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={12}>
         <div className={classes[0]}>
           <List>
             {category1.map((cat, nr) => (
@@ -59,7 +53,11 @@ export default function InteractiveList(link1) {
                     <ForumIcon />
                   </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={cat.Title} secondary={cat.CreatedDate} />
+                <ListItemText
+                  primary={cat.Title}
+                  secondary={cat.CreatedDate + " Creat de"}
+                />
+                <ListItemText primary={cat.CreatedDate + " Creat de"} />
                 <ListItemSecondaryAction>
                   <IconButton edge="end" aria-label="delete">
                     <DeleteIcon />

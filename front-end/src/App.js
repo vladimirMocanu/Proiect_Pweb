@@ -9,7 +9,7 @@ import SignUp from "./components/signUp";
 import MainPage from "./Pages/MainPage";
 import BrowserCategory from "./Pages/category/BrowserCategory";
 import CreateCategory from "./Pages/category/CreateCategory";
-import ShowCategory from "./Pages/category/ShowCategory";
+import ShowTopic from "./Pages/category/ShowTopic";
 import { createBrowserHistory } from "history";
 
 function App() {
@@ -49,7 +49,7 @@ function App() {
               <Route path="/mainPage" component={MainPage} />
               <Route path="/category/view" component={BrowserCategory} />
               <Route path="/category/create" component={CreateCategory} />
-              <Route path="/category/:id" component={ShowCategory} />
+              <Route path="/category/:id" component={ShowTopic} />
             </Switch>
           </div>
         </div>

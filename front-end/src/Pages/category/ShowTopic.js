@@ -3,6 +3,8 @@ import { BrowserRouter, useParams } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import axios from "axios";
 import List2 from "../../components/list";
+import { Button } from "@material-ui/core";
+import AddIcon from "@material-ui/icons/Add";
 
 export default function ShowCategory() {
   const [title, setTitle] = useState();
@@ -14,7 +16,6 @@ export default function ShowCategory() {
 
   const getCategory = async () => {
     const res = await axios.get("/api/v1/category/" + id);
-    //console.log(res.data);
     setTitle(res.data);
   };
 
@@ -23,7 +24,15 @@ export default function ShowCategory() {
       <BrowserRouter>
         <Navbar />
         {title && <h1>{title.Title}</h1>}
-        <List2 link1={"/api/v1/category/"} />
+        <List2 link1={"/api/v1/topic/" + id} />
+        <Button
+          variant="contained"
+          color="primary"
+          size="large"
+          startIcon={<AddIcon />}
+        >
+          Create new Topic
+        </Button>
       </BrowserRouter>
     </div>
   );
