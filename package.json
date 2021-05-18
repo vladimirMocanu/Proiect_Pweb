@@ -1,0 +1,36 @@
+{
+  "name": "proiect_pweb",
+  "version": "1.0.0",
+  "description": "Proiect PWEB",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon -r dotenv/config server/src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vladimirMocanu/Proiect_Pweb.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vladimirMocanu/Proiect_Pweb/issues"
+  },
+  "homepage": "https://github.com/vladimirMocanu/Proiect_Pweb#readme",
+  "dependencies": {
+    "@hapi/joi": "^17.1.1",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^9.0.2",
+    "express": "^4.17.1",
+    "express-async-errors": "^3.1.1",
+    "express-rate-limit": "^5.2.6",
+    "helmet": "^4.6.0",
+    "jsonwebtoken": "^8.5.1",
+    "log-timestamp": "^0.3.0",
+    "mongodb": "^3.6.6",
+    "mongoose": "^5.12.9",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.7",
+    "react-material-ui-form-validator": "^2.1.4"
+  }
+}
