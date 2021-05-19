@@ -26,7 +26,6 @@ export default function CreateCategory() {
   return (
     <div>
       <BrowserRouter>
-        <Navbar />
         <h1>Create Category</h1>
         <form onSubmit={handleSubmit}>
           <TextField

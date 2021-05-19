@@ -1,4 +1,6 @@
 const express = require("express");
+const jwt = require("jsonwebtoken");
+const sessionStorage = require("sessionstorage");
 
 const UsersManager = require("../../WebCore/Managers/UsersManager.js");
 //const UsersRepository = require("../../Infrastructure/PostgreSQL/Repository/UsersRepository.js");
@@ -9,6 +11,7 @@ const UsersManager = require("../../WebCore/Managers/UsersManager.js");
 //   UserLoginResponse,
 // } = require("../Models/Users.js");
 const ResponseFilter = require("../Filters/ResponseFilter.js");
+const User = require("../ModelsMongoDB/User.js");
 // const JWTFilter = require("../Filters/JWTFilter.js");
 // const AuthorizationFilter = require("../Filters/AuthorizationFilter.js");
 // const RoleConstants = require("../Constants/Roles.js");
@@ -30,18 +33,30 @@ Router.post("/register", async (req, res) => {
 
 Router.post("/login", async (req, res) => {
   // const userBody = new UserBody(req.body);
+
   try {
-    const [accessToken, refreshToken] = await UsersManager.authenticateAsync(
-      req
-    );
+    const [accessToken, refreshToken, userId] =
+      await UsersManager.authenticateAsync(req);
     res.header("Authorization", accessToken).send({
       accessToken: accessToken,
       refreshToken: refreshToken,
+      userId: userId,
     });
   } catch (e) {
     res.status(400).send("Email or password is wrong");
   }
   //const user = new UserLoginResponse(userDto.Token, userDto.Role);
+});
+
+Router.get("/init", async (req, res) => {
+  const { _id } = jwt.verify(req.query.token, process.env.ACCESS_TOKEN_SECRET);
+  console.log(_id);
+  const user = await User.findById(_id);
+  let response = null;
+  if (user) {
+    response = user;
+  }
+  res.send({ user: response });
 });
 
 // Router.get(

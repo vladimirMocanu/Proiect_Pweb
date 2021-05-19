@@ -1,8 +1,13 @@
 import React from "react";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-import { Switch, Route, Link } from "react-router-dom";
-import { Router } from "react-router";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  Redirect,
+} from "react-router-dom";
 
 import Login from "./components/login";
 import SignUp from "./components/signUp";
@@ -10,51 +15,62 @@ import MainPage from "./Pages/MainPage";
 import BrowserCategory from "./Pages/category/BrowserCategory";
 import CreateCategory from "./Pages/category/CreateCategory";
 import ShowTopic from "./Pages/category/ShowTopic";
-import { createBrowserHistory } from "history";
+import CreateTopic from "./Pages/category/CreateTopic";
+import { useState } from "react";
+import AuthContext from "./Contexts/AuthContext";
+import { useEffect } from "react";
+import NavBar from "./components/Navbar";
+import axios from "axios";
 
 function App() {
-  const historyInstance = createBrowserHistory();
+  const [user, setUser] = useState([]);
+  const [isInitiated, setIsInitiated] = useState([]);
 
+  const handleLogout = () => {
+    setUser([]);
+  };
+
+  useEffect(() => {
+    init1();
+  }, []);
+
+  const init1 = async () => {
+    const token = sessionStorage.getItem("token");
+    const res1 = await axios.get("/api/v1/users/init", { params: { token } });
+    const { user } = res1.data;
+    setUser(user);
+    setIsInitiated(true);
+  };
   return (
-    <Router history={historyInstance}>
-      <div className="App">
-        {/* <nav className="navbar navbar-expand-lg navbar-light fixed-top">
-          <div className="container">
-            <Link className="navbar-brand" to={"/sign-in"}>
-              RemoteStack
-            </Link>
-            <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
-              <ul className="navbar-nav ml-auto">
-                <li className="nav-item">
-                  <Link className="nav-link" to={"/sign-in"}>
-                    Sign in
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to={"/sign-up"}>
-                    Sign up
-                  </Link>
-                </li>
-              </ul>
+    <div>
+      {isInitiated && (
+        <AuthContext.Provider value={{ user, setUser, handleLogout }}>
+          <Router>
+            <div className="App">
+              <div className="outer">
+                <div className="inner">
+                  <NavBar />
+                  <Switch>
+                    <Route exact path="/" component={Login} />
+                    <Route path="/login">
+                      {!user ? <Login /> : <Redirect to="/" />}
+                    </Route>
+                    <Route path="/signUp">
+                      {!user ? <SignUp /> : <Redirect to="/" />}
+                    </Route>
+                    <Route path="/mainPage" component={MainPage} />
+                    <Route path="/category/view" component={BrowserCategory} />
+                    <Route path="/category/create" component={CreateCategory} />
+                    <Route path="/topic/create" component={CreateTopic} />
+                    <Route path="/category/:id" component={ShowTopic} />
+                  </Switch>
+                </div>
+              </div>
             </div>
-          </div>
-        </nav> */}
-
-        <div className="outer">
-          <div className="inner">
-            <Switch>
-              <Route exact path="/" component={Login} />
-              <Route path="/login" component={Login} />
-              <Route path="/signUp" component={SignUp} />
-              <Route path="/mainPage" component={MainPage} />
-              <Route path="/category/view" component={BrowserCategory} />
-              <Route path="/category/create" component={CreateCategory} />
-              <Route path="/category/:id" component={ShowTopic} />
-            </Switch>
-          </div>
-        </div>
-      </div>
-    </Router>
+          </Router>
+        </AuthContext.Provider>
+      )}
+    </div>
   );
 }
 

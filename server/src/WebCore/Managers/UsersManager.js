@@ -53,7 +53,7 @@ const authenticateAsync = async (req) => {
     );
   }
 
-  return [accessToken, refreshToken];
+  return [accessToken, refreshToken, user._id];
 };
 
 const registerAsync = async (req) => {

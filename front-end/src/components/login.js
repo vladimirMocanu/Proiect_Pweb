@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -12,6 +12,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import AuthContext from "../Contexts/AuthContext";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -33,19 +34,28 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-async function loginUser(credentials) {
-  return axios
-    .post("api/v1/users/login", {
-      Email: credentials.email,
-      Password: credentials.password,
-    })
-    .then((res) => console.log(res.data.accessToken));
-}
-
 export default function SignIn() {
+  const { setUser } = useContext(AuthContext);
   const classes = useStyles();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+
+  async function loginUser(credentials) {
+    return axios
+      .post("api/v1/users/login", {
+        Email: credentials.email,
+        Password: credentials.password,
+      })
+      .then(
+        (res) =>
+          sessionStorage.setItem(
+            "accesToken",
+            JSON.stringify(res.data.accessToken)
+          ),
+        (res) => setUser(res.data.userId),
+        (window.location = "/mainPage")
+      );
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();

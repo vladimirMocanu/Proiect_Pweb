@@ -14,8 +14,8 @@ const generateTokenAsync = async (user, tokenType) => {
     if (tokenType == "accessToken") {
       const accessToken = jsonWebToken.sign(
         { _id: user._id },
-        process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: "10m" }
+        process.env.ACCESS_TOKEN_SECRET
+        // { expiresIn: "10m" }
       );
 
       return accessToken;

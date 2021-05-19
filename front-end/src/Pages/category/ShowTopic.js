@@ -22,7 +22,6 @@ export default function ShowCategory() {
   return (
     <div>
       <BrowserRouter>
-        <Navbar />
         {title && <h1>{title.Title}</h1>}
         <List2 link1={"/api/v1/topic/" + id} />
         <Button
@@ -30,6 +29,7 @@ export default function ShowCategory() {
           color="primary"
           size="large"
           startIcon={<AddIcon />}
+          href="/topic/create"
         >
           Create new Topic
         </Button>
