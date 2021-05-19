@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 
 async function loginUser(credentials) {
   return axios
-    .post("api/v1/users/register", {
+    .post("http://localhost:3000/api/v1/users/signUp", {
       FirstName: credentials.firstName,
       LastName: credentials.lastName,
       Email: credentials.email,

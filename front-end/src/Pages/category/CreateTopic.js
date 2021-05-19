@@ -1,29 +1,36 @@
 import { Button, TextField } from "@material-ui/core";
 import axios from "axios";
-import React, { useState } from "react";
-import { BrowserRouter } from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { BrowserRouter, useParams } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
+import AuthContext from "../../Contexts/AuthContext";
 
-async function createCategory(credentials) {
-  return axios
-    .post("/api/v1/topic/create", {
-      Title: credentials.title,
-      Description: credentials.content,
-    })
-    .then(() => (window.location = "/api/v1/topic/"));
-}
-
-export default function CreateCategory() {
+export default function CreateTopic() {
   const [title, setTitle] = useState();
   const [content, setContent] = useState();
+  const { user } = useContext(AuthContext);
+  const { id } = useParams();
   //de adaugat descriere
+
+  async function createTopic(credentials) {
+    return axios
+      .post("/api/v1/topic/create", {
+        Title: credentials.title,
+        Description: credentials.content,
+        CreatedBy: credentials.user.FirstName,
+        IdCategory: credentials.id,
+      })
+      .then(() => (window.location = "/category/" + id));
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await createCategory({
+    await createTopic({
       title,
       content,
+      user,
+      id,
     });
   };
 

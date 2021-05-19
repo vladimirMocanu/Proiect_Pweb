@@ -4,10 +4,13 @@ const ResponseFilter = require("../Filters/ResponseFilter.js");
 
 const Router = express.Router();
 const TitleCat = require("../ModelsMongoDB/TitleCat");
+const Topic = require("../ModelsMongoDB/Topic.js");
 
 Router.post("/create", async (req, res) => {
   const title = new TitleCat({
     Title: req.body.Title,
+    Description: req.body.Description,
+    CreatedBy: req.body.CreatedBy,
   });
   try {
     const title1 = await title.save();
@@ -36,4 +39,22 @@ Router.get("/:id", async (req, res) => {
   // ResponseFilter.setResponseDetails(title, 201);
 });
 
+Router.delete("/:id", async (req, res) => {
+  console.log(req.params.id);
+  const cat = await TitleCat.deleteOne({
+    _id: req.params.id,
+  });
+  if (!cat) {
+    res.status(404).send({ message: "Not found" });
+  }
+
+  const deletetopic = await Topic.deleteMany({
+    IdCategory: req.params.id,
+  });
+  if (!deletetopic) {
+    res.status(404).send({ message: "Not found" });
+  }
+
+  // ResponseFilter.setResponseDetails(title, 201);
+});
 module.exports = Router;

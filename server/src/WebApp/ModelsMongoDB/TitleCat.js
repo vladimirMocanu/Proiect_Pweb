@@ -6,6 +6,14 @@ const CatSchema = mongoose.Schema(
       type: String,
       require: true,
     },
+    Description: {
+      type: String,
+      require: true,
+    },
+    CreatedBy: {
+      type: String,
+      require: false,
+    },
     CreatedDate: {
       type: Date,
       default: Date.now,

@@ -41,4 +41,16 @@ Router.get("/:id", async (req, res) => {
   // ResponseFilter.setResponseDetails(title, 201);
 });
 
+Router.delete("/:id/:id", async (req, res) => {
+  console.log(req.params.id);
+  const topic = await Topic.deleteOne({
+    _id: req.params.id,
+  });
+  if (!topic) {
+    res.status(404).send({ message: "Not found" });
+  }
+
+  // ResponseFilter.setResponseDetails(title, 201);
+});
+
 module.exports = Router;

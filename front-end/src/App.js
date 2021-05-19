@@ -35,12 +35,17 @@ function App() {
   }, []);
 
   const init1 = async () => {
-    const token = sessionStorage.getItem("token");
+    const token = sessionStorage.getItem("accessToken");
+    console.log(token);
     const res1 = await axios.get("/api/v1/users/init", { params: { token } });
     const { user } = res1.data;
     setUser(user);
     setIsInitiated(true);
+    console.log(user._id);
   };
+  if (!user._id) {
+    return <Login />;
+  }
   return (
     <div>
       {isInitiated && (
@@ -52,16 +57,12 @@ function App() {
                   <NavBar />
                   <Switch>
                     <Route exact path="/" component={Login} />
-                    <Route path="/login">
-                      {!user ? <Login /> : <Redirect to="/" />}
-                    </Route>
-                    <Route path="/signUp">
-                      {!user ? <SignUp /> : <Redirect to="/" />}
-                    </Route>
+                    <Route path="/login" component={Login} />
+                    <Route path="/signUp" component={SignUp} />
                     <Route path="/mainPage" component={MainPage} />
                     <Route path="/category/view" component={BrowserCategory} />
                     <Route path="/category/create" component={CreateCategory} />
-                    <Route path="/topic/create" component={CreateTopic} />
+                    <Route path="/topic/create/:id" component={CreateTopic} />
                     <Route path="/category/:id" component={ShowTopic} />
                   </Switch>
                 </div>

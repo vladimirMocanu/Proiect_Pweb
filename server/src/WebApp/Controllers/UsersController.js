@@ -49,7 +49,10 @@ Router.post("/login", async (req, res) => {
 });
 
 Router.get("/init", async (req, res) => {
-  const { _id } = jwt.verify(req.query.token, process.env.ACCESS_TOKEN_SECRET);
+  const token = req.query.token;
+  console.log(token);
+  if (token === undefined) return;
+  const { _id } = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
   console.log(_id);
   const user = await User.findById(_id);
   let response = null;
@@ -59,20 +62,19 @@ Router.get("/init", async (req, res) => {
   res.send({ user: response });
 });
 
-// Router.get(
-//   "/",
-//   JWTFilter.authorizeAndExtractTokenAsync,
-//   AuthorizationFilter.authorizeRoles(RoleConstants.ADMIN),
-//   async (req, res) => {
-//     const users = await UsersRepository.getAllAsync();
+Router.get(
+  "/:id",
+  // JWTFilter.authorizeAndExtractTokenAsync,
+  // AuthorizationFilter.authorizeRoles(RoleConstants.ADMIN),
+  async (req, res) => {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      res.status(404).send({ message: "Not found" });
+    }
 
-//     ResponseFilter.setResponseDetails(
-//       res,
-//       200,
-//       users.map((user) => new UserRegisterResponse(user))
-//     );
-//   }
-// );
+    res.json(user);
+  }
+);
 
 // Router.put(
 //   "/:userId/role/:roleId",

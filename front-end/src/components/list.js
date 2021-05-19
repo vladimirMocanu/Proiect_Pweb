@@ -36,6 +36,10 @@ export default function InteractiveList(link1) {
     setCategory(res.data);
   };
 
+  const Delete1 = async (id1) => {
+    const res = await axios.delete(link1.link1 + "/" + id1);
+  };
+
   return (
     <div className={classes.root}>
       <Grid item xs={12} md={12}>
@@ -53,13 +57,20 @@ export default function InteractiveList(link1) {
                     <ForumIcon />
                   </Avatar>
                 </ListItemAvatar>
+                <ListItemText primary={cat.Title} secondary={cat.Description} />
                 <ListItemText
-                  primary={cat.Title}
-                  secondary={cat.CreatedDate + " Creat de"}
+                  primary={" Creat de " + cat.CreatedBy}
+                  secondary={cat.CreatedDate}
                 />
-                <ListItemText primary={cat.CreatedDate + " Creat de"} />
                 <ListItemSecondaryAction>
-                  <IconButton edge="end" aria-label="delete">
+                  <IconButton
+                    edge="end"
+                    onClick={() => {
+                      Delete1(cat._id);
+                      // window.location.reload(false);
+                      getCategory();
+                    }}
+                  >
                     <DeleteIcon />
                   </IconButton>
                 </ListItemSecondaryAction>

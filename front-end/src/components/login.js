@@ -41,20 +41,17 @@ export default function SignIn() {
   const [password, setPassword] = useState();
 
   async function loginUser(credentials) {
-    return axios
-      .post("api/v1/users/login", {
+    return await axios
+      .post("http://localhost:3000/api/v1/users/login", {
         Email: credentials.email,
         Password: credentials.password,
       })
-      .then(
-        (res) =>
-          sessionStorage.setItem(
-            "accesToken",
-            JSON.stringify(res.data.accessToken)
-          ),
-        (res) => setUser(res.data.userId),
-        (window.location = "/mainPage")
-      );
+      .then((res) => {
+        console.log(res.data.accessToken + "ceva");
+        sessionStorage.setItem("accessToken", res.data.accessToken);
+        setUser(res.data.userI);
+        window.location = "/mainPage";
+      });
   }
 
   const handleSubmit = async (e) => {
