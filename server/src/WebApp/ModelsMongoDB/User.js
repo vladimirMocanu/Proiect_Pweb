@@ -41,6 +41,15 @@ const UserSchema = mongoose.Schema(
       type: Date,
       default: Date.now,
     },
+    Status: {
+      type: String,
+      enum: ["Pending", "Active"],
+      default: "Pending",
+    },
+    ConfirmationToken: {
+      type: String,
+      require: true,
+    },
   },
   { versionKey: false }
 );

@@ -16,6 +16,10 @@ import BrowserCategory from "./Pages/category/BrowserCategory";
 import CreateCategory from "./Pages/category/CreateCategory";
 import ShowTopic from "./Pages/category/ShowTopic";
 import CreateTopic from "./Pages/category/CreateTopic";
+import ShowComment from "./Pages/category/ShowComment";
+import CreateComment from "./Pages/category/CreateComment";
+import ConfirmEmail from "./Pages/ConfirmEmail";
+import adminPage from "./Pages/adminPage";
 import { useState } from "react";
 import AuthContext from "./Contexts/AuthContext";
 import { useEffect } from "react";
@@ -32,6 +36,7 @@ function App() {
 
   useEffect(() => {
     init1();
+    init1();
   }, []);
 
   const init1 = async () => {
@@ -41,11 +46,10 @@ function App() {
     const { user } = res1.data;
     setUser(user);
     setIsInitiated(true);
-    console.log(user._id);
   };
-  if (!user._id) {
-    return <Login />;
-  }
+  // if (!user._id) {
+  //   return <Login />;
+  // }
   return (
     <div>
       {isInitiated && (
@@ -56,14 +60,42 @@ function App() {
                 <div className="inner">
                   <NavBar />
                   <Switch>
-                    <Route exact path="/" component={Login} />
-                    <Route path="/login" component={Login} />
-                    <Route path="/signUp" component={SignUp} />
-                    <Route path="/mainPage" component={MainPage} />
-                    <Route path="/category/view" component={BrowserCategory} />
-                    <Route path="/category/create" component={CreateCategory} />
-                    <Route path="/topic/create/:id" component={CreateTopic} />
-                    <Route path="/category/:id" component={ShowTopic} />
+                    {!user._id ? (
+                      <>
+                        <Route exact path="/" component={Login} />
+                        <Route path="/login" component={Login} />
+                        <Route path="/signUp" component={SignUp} />
+                        <Route path="/confirm/:id" component={ConfirmEmail} />
+                      </>
+                    ) : (
+                      <>
+                        <Route exact path="/" component={MainPage} />
+                        <Route path="/mainPage" component={MainPage} />
+                        <Route
+                          path="/category/view"
+                          component={BrowserCategory}
+                        />
+                        <Route
+                          path="/category/create"
+                          component={CreateCategory}
+                        />
+                        <Route
+                          path="/topic/create/:id"
+                          component={CreateTopic}
+                        />
+                        <Route path="/category/:id" component={ShowTopic} />
+                        <Route path="/topic/:id" component={ShowComment} />
+                        <Route
+                          path="/comment/create/:id"
+                          component={CreateComment}
+                        />
+                        {user.Role == "Admin" ? (
+                          <Route path="/adminPage" component={adminPage} />
+                        ) : (
+                          <Redirect to="/mainPage" />
+                        )}
+                      </>
+                    )}
                   </Switch>
                 </div>
               </div>

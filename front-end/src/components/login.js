@@ -47,7 +47,6 @@ export default function SignIn() {
         Password: credentials.password,
       })
       .then((res) => {
-        console.log(res.data.accessToken + "ceva");
         sessionStorage.setItem("accessToken", res.data.accessToken);
         setUser(res.data.userI);
         window.location = "/mainPage";

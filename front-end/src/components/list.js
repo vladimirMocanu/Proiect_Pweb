@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -12,6 +12,7 @@ import Typography from "@material-ui/core/Typography";
 import ForumIcon from "@material-ui/icons/Forum";
 import DeleteIcon from "@material-ui/icons/Delete";
 import axios from "axios";
+import AuthContext from "../Contexts/AuthContext";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function InteractiveList(link1) {
   const classes = useStyles();
+  const { user } = useContext(AuthContext);
 
   const [category1, setCategory] = useState([]);
 
@@ -39,7 +41,6 @@ export default function InteractiveList(link1) {
   const Delete1 = async (id1) => {
     const res = await axios.delete(link1.link1 + "/" + id1);
   };
-
   return (
     <div className={classes.root}>
       <Grid item xs={12} md={12}>
@@ -50,7 +51,7 @@ export default function InteractiveList(link1) {
                 button
                 type="submit"
                 component="button"
-                href={"/category/" + cat._id}
+                href={link1.link2 + cat._id}
               >
                 <ListItemAvatar>
                   <Avatar>
@@ -62,18 +63,22 @@ export default function InteractiveList(link1) {
                   primary={" Creat de " + cat.CreatedBy}
                   secondary={cat.CreatedDate}
                 />
-                <ListItemSecondaryAction>
-                  <IconButton
-                    edge="end"
-                    onClick={() => {
-                      Delete1(cat._id);
-                      // window.location.reload(false);
-                      getCategory();
-                    }}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </ListItemSecondaryAction>
+                {user.Role == "Admin" ? (
+                  <ListItemSecondaryAction>
+                    <IconButton
+                      edge="end"
+                      onClick={() => {
+                        Delete1(cat._id);
+                        // window.location.reload(false);
+                        getCategory();
+                      }}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                ) : (
+                  <></>
+                )}
               </ListItem>
             ))}
           </List>

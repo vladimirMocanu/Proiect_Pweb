@@ -33,9 +33,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-async function loginUser(credentials) {
+async function registerUser(credentials) {
   return axios
-    .post("http://localhost:3000/api/v1/users/signUp", {
+    .post("http://localhost:3000/api/v1/users/register", {
       FirstName: credentials.firstName,
       LastName: credentials.lastName,
       Email: credentials.email,
@@ -55,7 +55,7 @@ export default function SignUp() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await loginUser({
+    await registerUser({
       firstName,
       lastName,
       email,

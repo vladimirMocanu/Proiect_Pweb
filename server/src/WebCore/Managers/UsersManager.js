@@ -12,18 +12,23 @@ const ServerError = require("../../WebApp/Models/ServerError.js");
 const User = require("../../WebApp/ModelsMongoDB/User");
 const Token = require("../../WebApp/ModelsMongoDB/Token");
 
-const authenticateAsync = async (req) => {
+const authenticateAsync = async (req, res) => {
   console.info(`Authenticates user with email`);
 
   const { error } = loginValidation(req.body);
-  if (error) return console.log("Error validate data!");
+  if (error)
+    return res.status(401).send({
+      message: "Error validate data!",
+    });
 
   const user = await User.findOne({
     Email: req.body.Email,
   });
 
   if (!user) {
-    return console.log(`Email or password is wrong`);
+    return res.status(401).send({
+      message: "Email or password is wrong",
+    });
   }
   var isOk = await comparePlainTextToHashedPasswordAsync(
     req.body.Password,
@@ -31,7 +36,15 @@ const authenticateAsync = async (req) => {
   );
 
   if (!isOk) {
-    return console.log(`Email or password is wrong`);
+    return res.status(401).send({
+      message: "Email or password is wrong",
+    });
+  }
+
+  if (user.Status != "Active") {
+    return res.status(401).send({
+      message: "Pending Account. Please Verify Your Email!",
+    });
   }
 
   const refreshToken = await generateTokenAsync(user, "refreshToken");
@@ -56,7 +69,7 @@ const authenticateAsync = async (req) => {
   return [accessToken, refreshToken, user._id];
 };
 
-const registerAsync = async (req) => {
+const registerAsync = async (req, res) => {
   // const hashedPassword = await hashPasswordAsync(plainTextPassword);
 
   // const user = await UsersRepository.addAsync(username, hashedPassword);
@@ -65,22 +78,32 @@ const registerAsync = async (req) => {
 
   //Validate date
   const { error } = registerValidation(req.body);
-  if (error) console.log("Error validate data!");
+  if (error)
+    return res.status(401).send({
+      message: "Error validate data!",
+    });
 
   //checking if the user is exist
   const userNameExist = await User.findOne({
     FirstName: req.body.FirstName,
     LastName: req.body.LastName,
   });
-  if (userNameExist) console.log("User name exist");
+  if (userNameExist)
+    return res.status(401).send({
+      message: "User name exist",
+    });
 
   const userEmailExist = await User.findOne({
     Email: req.body.Email,
   });
-  if (userEmailExist) console.log("User email exist");
+  if (userEmailExist)
+    return res.status(401).send({
+      message: "User name exist",
+    });
 
   //Encrypt password
   const encryptPassword = await hashPasswordAsync(req.body.Password);
+  const tokenConfirm = await generateTokenAsync(userNameExist, "tokenConfirm");
 
   //Create/add new user
   const user = new User({
@@ -89,6 +112,7 @@ const registerAsync = async (req) => {
     Email: req.body.Email,
     Password: encryptPassword,
     Role: "User",
+    ConfirmationToken: tokenConfirm,
   });
   return user;
 };

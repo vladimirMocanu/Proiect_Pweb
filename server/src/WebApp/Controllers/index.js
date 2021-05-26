@@ -5,6 +5,7 @@ const Router = require("express").Router();
 const UsersController = require("./UsersController.js");
 const CreateCat = require("./CategoryController");
 const Topic = require("./TopicController");
+const Comment = require("./CommentController");
 //const RolesController = require("./RolesController.js");
 
 /**
@@ -14,6 +15,7 @@ const Topic = require("./TopicController");
 Router.use("/v1/users", UsersController);
 Router.use("/v1/category", CreateCat);
 Router.use("/v1/topic", Topic);
+Router.use("/v1/comment", Comment);
 //Router.use("/v1/roles", authorizeAndExtractTokenAsync, RolesController);
 
 /**

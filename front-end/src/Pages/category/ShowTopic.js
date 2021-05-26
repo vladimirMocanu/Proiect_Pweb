@@ -22,7 +22,7 @@ export default function ShowTopic() {
     <div>
       <BrowserRouter>
         {title && <h1>{title.Title}</h1>}
-        <List2 link1={"/api/v1/topic/" + id} />
+        <List2 link1={"/api/v1/topic/" + id} link2={"/topic/"} />
         <Button
           variant="contained"
           color="primary"

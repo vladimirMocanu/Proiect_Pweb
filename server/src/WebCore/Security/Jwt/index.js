@@ -19,13 +19,21 @@ const generateTokenAsync = async (user, tokenType) => {
       );
 
       return accessToken;
-    } else {
+    } else if (tokenType == "refreshToken") {
       const refreshToken = jsonWebToken.sign(
         { _id: user._id },
         process.env.REFRESH_TOKEN_SECRET
       );
 
       return refreshToken;
+    } else {
+      const confirmToken = jsonWebToken.sign(
+        { code: "usercode" },
+        process.env.CONFIRMATION_TOKEN_SECRET,
+        { expiresIn: "5m" }
+      );
+
+      return confirmToken;
     }
   } catch (err) {
     console.trace(err);
