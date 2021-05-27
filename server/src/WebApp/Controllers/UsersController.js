@@ -91,6 +91,28 @@ Router.get(
     if (!user) {
       res.status(404).send({ message: "Not found" });
     }
+    res.json(user);
+  }
+);
+
+Router.get(
+  "/graph/user",
+  // JWTFilter.authorizeAndExtractTokenAsync,
+  // AuthorizationFilter.authorizeRoles(RoleConstants.ADMIN),
+  async (req, res) => {
+    const user = await User.aggregate([
+      {
+        $group: {
+          _id: {
+            Month: { $month: "$CreatedDate" },
+          },
+          count: { $sum: { $cond: [{ $eq: ["$source", "$month"] }, 1, 0] } },
+        },
+      },
+    ]);
+    if (!user) {
+      res.status(404).send({ message: "Not found" });
+    }
 
     res.json(user);
   }
@@ -137,12 +159,11 @@ Router.delete("/logout", async (req, res) => {
   ResponseFilter.setResponseDetails(res, 201);
 });
 
-//Delete refreshtoken from DB => logout user
 Router.delete("/delete/:id", async (req, res) => {
   console.log(req.params.id);
   try {
     const deleteUser = await User.deleteOne({
-      FirstName: req.params.id,
+      Email: req.params.id,
     });
     //return res.sendStatus(204).send("Logout successfully");
   } catch (err) {

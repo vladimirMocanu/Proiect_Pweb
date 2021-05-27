@@ -22,16 +22,16 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import axios from "axios";
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
+function createData(name, email, status, role, idUser) {
+  return { name, email, status, role, idUser };
 }
 
 async function deleteUser(selected1) {
+  console.log(selected1);
   for (let i in selected1) {
-    await axios.delete(
-      "http://localhost:3000/api/v1/users/delete/" + selected1[i],
-      {}
-    );
+    await axios
+      .delete("http://localhost:3000/api/v1/users/delete/" + selected1[i])
+      .then(() => (window.location = "/adminPage"));
   }
   return;
 }
@@ -66,12 +66,12 @@ const headCells = [
     id: "name",
     numeric: false,
     disablePadding: true,
-    label: "Dessert (100g serving)",
+    label: "Name",
   },
-  { id: "calories", numeric: true, disablePadding: false, label: "Calories" },
-  { id: "fat", numeric: true, disablePadding: false, label: "Fat (g)" },
-  { id: "carbs", numeric: true, disablePadding: false, label: "Carbs (g)" },
-  { id: "protein", numeric: true, disablePadding: false, label: "Protein (g)" },
+  { id: "email", numeric: true, disablePadding: false, label: "Email" },
+  { id: "status", numeric: true, disablePadding: false, label: "Status" },
+  { id: "role", numeric: true, disablePadding: false, label: "Role" },
+  { id: "idUser", numeric: true, disablePadding: false, label: "idUser" },
 ];
 
 function EnhancedTableHead(props) {
@@ -238,12 +238,13 @@ const useStyles = makeStyles((theme) => ({
 export default function EnhancedTable() {
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("calories");
+  const [orderBy, setOrderBy] = React.useState("email");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const [users, setUsers] = useState();
+
   async function getUsers() {
     const res = await axios.get("http://localhost:3000/api/v1/users");
     setUsers(res.data);
@@ -257,11 +258,11 @@ export default function EnhancedTable() {
   if (users != undefined) {
     for (let i in users) {
       rows[i] = createData(
-        users[i].FirstName,
-        users[i].LastName,
+        users[i].FirstName + " " + users[i].LastName,
         users[i].Email,
-        users[i]._id,
-        users[i].Status
+        users[i].Status,
+        users[i].Role,
+        users[i]._id
       );
     }
   }
@@ -274,19 +275,19 @@ export default function EnhancedTable() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.name);
+      const newSelecteds = rows.map((n) => n.email);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, email) => {
+    const selectedIndex = selected.indexOf(email);
     let newSelected = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, email);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -310,7 +311,7 @@ export default function EnhancedTable() {
     setPage(0);
   };
 
-  const isSelected = (name) => selected.indexOf(name) !== -1;
+  const isSelected = (email) => selected.indexOf(email) !== -1;
 
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
@@ -338,17 +339,17 @@ export default function EnhancedTable() {
               {stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.name);
+                  const isItemSelected = isSelected(row.email);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.name)}
+                      onClick={(event) => handleClick(event, row.email)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.name}
+                      key={row.email}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
@@ -363,12 +364,12 @@ export default function EnhancedTable() {
                         scope="row"
                         padding="none"
                       >
-                        {row.name}
+                        {row.email}
                       </TableCell>
-                      <TableCell align="right">{row.calories}</TableCell>
-                      <TableCell align="right">{row.fat}</TableCell>
-                      <TableCell align="right">{row.carbs}</TableCell>
-                      <TableCell align="right">{row.protein}</TableCell>
+                      <TableCell align="right">{row.email}</TableCell>
+                      <TableCell align="right">{row.status}</TableCell>
+                      <TableCell align="right">{row.role}</TableCell>
+                      <TableCell align="right">{row.idUser}</TableCell>
                     </TableRow>
                   );
                 })}

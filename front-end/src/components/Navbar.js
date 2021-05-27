@@ -201,7 +201,13 @@ export default function PrimarySearchAppBar() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography className={classes.title} variant="h6" noWrap>
+          <Typography
+            button
+            href="/mainPage"
+            className={classes.title}
+            variant="h6"
+            noWrap
+          >
             Forum Auto
           </Typography>
           {user._id ? (

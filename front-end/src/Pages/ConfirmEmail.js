@@ -1,3 +1,4 @@
+import { Button } from "@material-ui/core";
 import axios from "axios";
 import React from "react";
 import { useParams } from "react-router";
@@ -12,7 +13,9 @@ export default function ConfirmEmail() {
   return (
     <div>
       <p>Email confirm. Go to Login</p>
-      <button href="/login"> Login</button>
+      <Button variant="contained" color="primary" size="large" href={"/login"}>
+        Login
+      </Button>
     </div>
   );
 }
