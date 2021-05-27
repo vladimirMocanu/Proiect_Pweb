@@ -11,18 +11,22 @@ import {
 import { Animation } from "@devexpress/dx-react-chart";
 import axios from "axios";
 
-// const data = [
-//   { year: "1950", population: 2.525 },
-//   { year: "1960", population: 3.018 },
-//   { year: "1970", population: 3.682 },
-//   { year: "1980", population: 4.44 },
-//   { year: "1990", population: 5.31 },
-//   { year: "2000", population: 6.127 },
-//   { year: "2010", population: 6.93 },
-// ];
-
 export default function BarChart() {
   const [data, setData] = useState();
+  const monthData = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
 
   async function getUsers() {
     const res = await axios.get(
@@ -47,7 +51,7 @@ export default function BarChart() {
 
     for (let i in data) {
       rows[i] = {
-        year: data[i]._id.Month + "",
+        year: monthData[data[i]._id.Month - 1] + "",
         population: data[i].count,
       };
     }

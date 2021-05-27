@@ -8,7 +8,6 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
 import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
 import ForumIcon from "@material-ui/icons/Forum";
 import DeleteIcon from "@material-ui/icons/Delete";
 import axios from "axios";
@@ -34,7 +33,6 @@ export default function InteractiveList(link1) {
 
   const getCategory = async () => {
     const res = await axios.get(link1.link1);
-    //console.log(res.data);
     setCategory(res.data);
   };
 
@@ -63,7 +61,7 @@ export default function InteractiveList(link1) {
                   primary={" Creat de " + cat.CreatedBy}
                   secondary={cat.CreatedDate}
                 />
-                {user.Role == "Admin" ? (
+                {user.Role == "Admin" || user.Role == "Support" ? (
                   <ListItemSecondaryAction>
                     <IconButton
                       edge="end"

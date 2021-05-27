@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const Comment = mongoose.Schema(
   {
-    Content: {
+    Description: {
       type: String,
       require: true,
     },

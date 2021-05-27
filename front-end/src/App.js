@@ -5,7 +5,6 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
   Redirect,
 } from "react-router-dom";
 
@@ -26,9 +25,14 @@ import { useEffect } from "react";
 import NavBar from "./components/Navbar";
 import axios from "axios";
 
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+import CssBaseline from "@material-ui/core/CssBaseline";
+
 function App() {
   const [user, setUser] = useState([]);
   const [isInitiated, setIsInitiated] = useState([]);
+  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
 
   const handleLogout = () => {
     setUser([]);
@@ -39,6 +43,16 @@ function App() {
     init1();
   }, []);
 
+  const theme = React.useMemo(
+    () =>
+      createMuiTheme({
+        palette: {
+          type: prefersDarkMode ? "dark" : "light",
+        },
+      }),
+    [prefersDarkMode]
+  );
+
   const init1 = async () => {
     const token = sessionStorage.getItem("accessToken");
     console.log(token);
@@ -47,11 +61,10 @@ function App() {
     setUser(user);
     setIsInitiated(true);
   };
-  // if (!user._id) {
-  //   return <Login />;
-  // }
+
   return (
-    <div>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
       {isInitiated && (
         <AuthContext.Provider value={{ user, setUser, handleLogout }}>
           <Router>
@@ -59,51 +72,47 @@ function App() {
               <div className="outer">
                 <div className="inner">
                   <NavBar />
-                  <Switch>
-                    {!user._id ? (
-                      <>
-                        <Route exact path="/" component={Login} />
-                        <Route path="/login" component={Login} />
-                        <Route path="/signUp" component={SignUp} />
-                        <Route path="/confirm/:id" component={ConfirmEmail} />
-                      </>
-                    ) : (
-                      <>
-                        <Route exact path="/" component={MainPage} />
-                        <Route path="/mainPage" component={MainPage} />
-                        <Route
-                          path="/category/view"
-                          component={BrowserCategory}
-                        />
-                        <Route
-                          path="/category/create"
-                          component={CreateCategory}
-                        />
-                        <Route
-                          path="/topic/create/:id"
-                          component={CreateTopic}
-                        />
-                        <Route path="/category/:id" component={ShowTopic} />
-                        <Route path="/topic/:id" component={ShowComment} />
-                        <Route
-                          path="/comment/create/:id"
-                          component={CreateComment}
-                        />
-                        {user.Role == "Admin" ? (
-                          <Route path="/adminPage" component={adminPage} />
-                        ) : (
-                          <Redirect to="/mainPage" />
-                        )}
-                      </>
-                    )}
-                  </Switch>
+
+                  {!user._id ? (
+                    <Switch>
+                      <Route exact path="/" component={Login} />
+                      <Route path="/login" component={Login} />
+                      <Route path="/signUp" component={SignUp} />
+                      <Route path="/confirm/:id" component={ConfirmEmail} />
+                    </Switch>
+                  ) : (
+                    <Switch>
+                      <Route exact path="/" component={MainPage} />
+                      <Route path="/mainPage" component={MainPage} />
+                      <Route
+                        path="/category/view"
+                        component={BrowserCategory}
+                      />
+                      <Route
+                        path="/category/create"
+                        component={CreateCategory}
+                      />
+                      <Route path="/topic/create/:id" component={CreateTopic} />
+                      <Route path="/category/:id" component={ShowTopic} />
+                      <Route path="/topic/:id" component={ShowComment} />
+                      <Route
+                        path="/comment/create/:id"
+                        component={CreateComment}
+                      />
+                      {user.Role == "Admin" ? (
+                        <Route path="/adminPage" component={adminPage} />
+                      ) : (
+                        <Redirect to="/mainPage" />
+                      )}
+                    </Switch>
+                  )}
                 </div>
               </div>
             </div>
           </Router>
         </AuthContext.Provider>
       )}
-    </div>
+    </ThemeProvider>
   );
 }
 

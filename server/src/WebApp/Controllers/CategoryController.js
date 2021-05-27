@@ -12,6 +12,7 @@ Router.post("/create", async (req, res) => {
     Description: req.body.Description,
     CreatedBy: req.body.CreatedBy,
   });
+
   try {
     const title1 = await title.save();
     //res.send({ user: user._id });
@@ -57,4 +58,27 @@ Router.delete("/:id", async (req, res) => {
 
   // ResponseFilter.setResponseDetails(title, 201);
 });
+
+Router.get(
+  "/graph/category",
+  // JWTFilter.authorizeAndExtractTokenAsync,
+  // AuthorizationFilter.authorizeRoles(RoleConstants.ADMIN),
+  async (req, res) => {
+    const user = await TitleCat.aggregate([
+      {
+        $group: {
+          _id: {
+            Month: { $month: "$CreatedDate" },
+          },
+          count: { $sum: { $cond: [{ $eq: ["$source", "$month"] }, 1, 0] } },
+        },
+      },
+    ]);
+    if (!user) {
+      res.status(404).send({ message: "Not found" });
+    }
+
+    res.json(user);
+  }
+);
 module.exports = Router;

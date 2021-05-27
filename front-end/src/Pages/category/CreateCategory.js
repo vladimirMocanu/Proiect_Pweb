@@ -2,7 +2,6 @@ import { Button, TextField } from "@material-ui/core";
 import axios from "axios";
 import React, { useContext, useState } from "react";
 import { BrowserRouter, useParams } from "react-router-dom";
-import Navbar from "../../components/Navbar";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import AuthContext from "../../Contexts/AuthContext";
 
@@ -10,12 +9,11 @@ export default function CreateTopic() {
   const [title, setTitle] = useState();
   const [content, setContent] = useState();
   const { user } = useContext(AuthContext);
-  const { id } = useParams();
   //de adaugat descriere
 
   async function createTopic(credentials) {
     return axios
-      .post("/api/v1/category/create", {
+      .post("/api/v1/category", {
         Title: credentials.title,
         Description: credentials.content,
         CreatedBy: credentials.user.FirstName,

@@ -53,4 +53,27 @@ Router.delete("/:id/:id", async (req, res) => {
   // ResponseFilter.setResponseDetails(title, 201);
 });
 
+Router.get(
+  "/graph/topic",
+  // JWTFilter.authorizeAndExtractTokenAsync,
+  // AuthorizationFilter.authorizeRoles(RoleConstants.ADMIN),
+  async (req, res) => {
+    const user = await Topic.aggregate([
+      {
+        $group: {
+          _id: {
+            Month: { $month: "$CreatedDate" },
+          },
+          count: { $sum: { $cond: [{ $eq: ["$source", "$month"] }, 1, 0] } },
+        },
+      },
+    ]);
+    if (!user) {
+      res.status(404).send({ message: "Not found" });
+    }
+
+    res.json(user);
+  }
+);
+
 module.exports = Router;

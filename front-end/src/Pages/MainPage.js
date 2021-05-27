@@ -12,13 +12,13 @@ export default function MainPage() {
       <Router>
         <h1>Main Page</h1>
         <List2 link1={"/api/v1/category/"} link2={"/category/"} />
-        {user.Role == "Admin" ? (
+        {user.Role == "Admin" || user.Role == "Support" ? (
           <Button
             variant="contained"
             color="primary"
             size="large"
             startIcon={<AddIcon />}
-            href={"/category/create/"}
+            href={"/category/create"}
           >
             Create new Category
           </Button>

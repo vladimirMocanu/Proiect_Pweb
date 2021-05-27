@@ -17,6 +17,7 @@ import MoreIcon from "@material-ui/icons/MoreVert";
 import AuthContext from "../Contexts/AuthContext";
 import axios from "axios";
 import { Redirect } from "react-router";
+import { Button } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -201,15 +202,7 @@ export default function PrimarySearchAppBar() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography
-            button
-            href="/mainPage"
-            className={classes.title}
-            variant="h6"
-            noWrap
-          >
-            Forum Auto
-          </Typography>
+          <Button href="/mainPage">Forum Auto</Button>
           {user._id ? (
             <div className={classes.search}>
               <div className={classes.searchIcon}>
