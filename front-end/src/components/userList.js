@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
-import { lighten, makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -16,18 +16,15 @@ import Paper from "@material-ui/core/Paper";
 import Checkbox from "@material-ui/core/Checkbox";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
-
 import DeleteIcon from "@material-ui/icons/Delete";
-import FilterListIcon from "@material-ui/icons/FilterList";
 import axios from "axios";
-import AddIcon from "@material-ui/icons/Add";
+import RefreshIcon from "@material-ui/icons/Refresh";
 
 function createData(name, email, status, role, idUser) {
   return { name, email, status, role, idUser };
 }
 
 async function deleteUser(selected1) {
-  console.log(selected1);
   for (let i in selected1) {
     await axios
       .delete("http://localhost:3000/api/v1/users/delete/" + selected1[i])
@@ -138,18 +135,14 @@ EnhancedTableHead.propTypes = {
 const useToolbarStyles = makeStyles((theme) => ({
   root: {
     paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(1),
+    paddingRight: theme.spacing(2),
+    paddingTop: theme.spacing(2),
+    paddingButton: theme.spacing(1),
   },
-  highlight:
-    theme.palette.type === "light"
-      ? {
-          color: theme.palette.primary.main,
-          backgroundColor: lighten(theme.palette.primary.light, 0.85),
-        }
-      : {
-          color: theme.palette.text.primary,
-          backgroundColor: theme.palette.primary.dark,
-        },
+  highlight: {
+    color: theme.palette.text.primary,
+    backgroundColor: theme.palette.primary.dark,
+  },
   title: {
     flex: "1 1 100%",
   },
@@ -168,7 +161,7 @@ const EnhancedTableToolbar = (props) => {
       {numSelected.length > 0 ? (
         <Typography
           className={classes.title}
-          color="primary"
+          color="secondary"
           variant="subtitle1"
           component="div"
         >
@@ -181,7 +174,7 @@ const EnhancedTableToolbar = (props) => {
           id="tableTitle"
           component="div"
         >
-          Nutrition
+          User List
         </Typography>
       )}
 
@@ -197,9 +190,14 @@ const EnhancedTableToolbar = (props) => {
           </IconButton>
         </Tooltip>
       ) : (
-        <Tooltip title="Filter list">
-          <IconButton aria-label="filter list">
-            <FilterListIcon />
+        <Tooltip title="Refresh">
+          <IconButton
+            aria-label="Refresh"
+            onClick={() => {
+              window.location = "/adminPage";
+            }}
+          >
+            <RefreshIcon />
           </IconButton>
         </Tooltip>
       )}
@@ -214,6 +212,8 @@ EnhancedTableToolbar.propTypes = {
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
+    paddingBottom: 30,
+    paddingTop: 10,
   },
   paper: {
     width: "100%",
@@ -255,7 +255,7 @@ export default function EnhancedTable() {
   }, []);
 
   let rows = [];
-  if (users != undefined) {
+  if (users !== undefined) {
     for (let i in users) {
       rows[i] = createData(
         users[i].FirstName + " " + users[i].LastName,

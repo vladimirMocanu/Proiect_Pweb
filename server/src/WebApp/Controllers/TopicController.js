@@ -34,7 +34,17 @@ Router.get("/:id", async (req, res) => {
     IdCategory: req.params.id,
   });
   if (!cat) {
-    res.status(404).send({ message: "Not found" });
+    return res.status(404).send({ message: "Not found" });
+  }
+
+  res.json(cat);
+  // ResponseFilter.setResponseDetails(title, 201);
+});
+
+Router.get("/getTopic/:id", async (req, res) => {
+  const cat = await Topic.findById(req.params.id);
+  if (!cat) {
+    return res.status(404).send({ message: "Not found" });
   }
 
   res.json(cat);
@@ -42,7 +52,6 @@ Router.get("/:id", async (req, res) => {
 });
 
 Router.delete("/:id/:id", async (req, res) => {
-  console.log(req.params.id);
   const topic = await Topic.deleteOne({
     _id: req.params.id,
   });

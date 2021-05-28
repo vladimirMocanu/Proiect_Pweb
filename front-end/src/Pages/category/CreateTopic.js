@@ -1,17 +1,24 @@
-import { Button, TextField } from "@material-ui/core";
+import { Button, TextField, Typography } from "@material-ui/core";
 import axios from "axios";
 import React, { useContext, useState } from "react";
 import { BrowserRouter, useParams } from "react-router-dom";
-import Navbar from "../../components/Navbar";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import AuthContext from "../../Contexts/AuthContext";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    paddingTop: 20,
+    paddingBottom: 20,
+  },
+}));
 
 export default function CreateTopic() {
   const [title, setTitle] = useState();
   const [content, setContent] = useState();
   const { user } = useContext(AuthContext);
   const { id } = useParams();
-  //de adaugat descriere
+  const classes = useStyles();
 
   async function createTopic(credentials) {
     return axios
@@ -37,7 +44,9 @@ export default function CreateTopic() {
   return (
     <div>
       <BrowserRouter>
-        <h1>Create Topic</h1>
+        <Typography variant="h2" className={classes.root}>
+          Create Topic
+        </Typography>
         <form onSubmit={handleSubmit}>
           <TextField
             autoComplete="Title"

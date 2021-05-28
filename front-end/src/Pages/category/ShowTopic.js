@@ -2,12 +2,21 @@ import React, { useEffect, useState } from "react";
 import { BrowserRouter, useParams } from "react-router-dom";
 import axios from "axios";
 import List2 from "../../components/list";
-import { Button } from "@material-ui/core";
+import { Button, Typography } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    paddingTop: 10,
+    paddingBottom: 10,
+  },
+}));
 
 export default function ShowTopic() {
   const [title, setTitle] = useState();
   const { id } = useParams();
+  const classes = useStyles();
 
   useEffect(() => {
     getTopic();
@@ -17,21 +26,34 @@ export default function ShowTopic() {
     const res = await axios.get("/api/v1/category/" + id);
     setTitle(res.data);
   };
-  console.log(id);
   return (
     <div>
       <BrowserRouter>
-        {title && <h1>{title.Title}</h1>}
+        {title && (
+          <div>
+            <Typography variant="h3" className={classes.root}>
+              {title.Title}
+            </Typography>
+            <Typography variant="h5" className={classes.root}>
+              {title.Description}
+            </Typography>
+          </div>
+        )}
+        <Typography variant="h5" className={classes.root} align="left">
+          Topics
+        </Typography>
         <List2 link1={"/api/v1/topic/" + id} link2={"/topic/"} />
-        <Button
-          variant="contained"
-          color="primary"
-          size="large"
-          startIcon={<AddIcon />}
-          href={"/topic/create/" + id}
-        >
-          Create new Topic
-        </Button>
+        <div className={classes.root}>
+          <Button
+            variant="contained"
+            color="primary"
+            size="large"
+            startIcon={<AddIcon />}
+            href={"/topic/create/" + id}
+          >
+            Create new Topic
+          </Button>
+        </div>
       </BrowserRouter>
     </div>
   );

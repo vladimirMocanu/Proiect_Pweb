@@ -41,7 +41,6 @@ Router.get("/:id", async (req, res) => {
 });
 
 Router.delete("/:id", async (req, res) => {
-  console.log(req.params.id);
   const cat = await TitleCat.deleteOne({
     _id: req.params.id,
   });

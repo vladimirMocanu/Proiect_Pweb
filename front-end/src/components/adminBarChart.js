@@ -10,6 +10,13 @@ import {
 
 import { Animation } from "@devexpress/dx-react-chart";
 import axios from "axios";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    paddingBottom: 40,
+  },
+}));
 
 export default function BarChart() {
   const [data, setData] = useState();
@@ -34,13 +41,14 @@ export default function BarChart() {
     );
     setData(res.data);
   }
+  const classes = useStyles();
 
   useEffect(() => {
     getUsers();
   }, []);
 
   let rows = [];
-  if (data != undefined) {
+  if (data !== undefined) {
     for (let i = 0; i < data.length - 1; i++) {
       if (data[i]._id.Month > data[i + 1]._id.Month) {
         let a = data[i];
@@ -57,15 +65,17 @@ export default function BarChart() {
     }
   }
   return (
-    <Paper>
-      <Chart data={rows}>
-        <ArgumentAxis />
-        <ValueAxis max={rows.length} />
+    <div className={classes.root}>
+      <Paper>
+        <Chart data={rows}>
+          <ArgumentAxis />
+          <ValueAxis max={rows.length} />
 
-        <BarSeries valueField="population" argumentField="year" />
-        <Title text="NewUsers/per Month" />
-        <Animation />
-      </Chart>
-    </Paper>
+          <BarSeries valueField="population" argumentField="year" />
+          <Title text="NewUsers/per Month" />
+          <Animation />
+        </Chart>
+      </Paper>
+    </div>
   );
 }

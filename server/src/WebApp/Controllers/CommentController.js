@@ -41,7 +41,6 @@ Router.get("/:id", async (req, res) => {
 });
 
 Router.delete("/:id/:id", async (req, res) => {
-  console.log(req.params.id);
   const topic = await Comment.deleteOne({
     _id: req.params.id,
   });

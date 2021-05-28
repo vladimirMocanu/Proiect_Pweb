@@ -72,7 +72,7 @@ export default function ChartActivity() {
   }, []);
 
   let rows = [];
-  if (category != undefined && topic != undefined && comment != undefined) {
+  if (category !== undefined && topic !== undefined && comment !== undefined) {
     for (let i = 0; i < category.length - 1; i++) {
       if (category[i]._id.Month > category[i + 1]._id.Month) {
         let a = category[i];

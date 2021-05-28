@@ -55,12 +55,13 @@ function App() {
 
   const init1 = async () => {
     const token = sessionStorage.getItem("accessToken");
-    console.log(token);
     const res1 = await axios.get("/api/v1/users/init", { params: { token } });
     const { user } = res1.data;
     setUser(user);
     setIsInitiated(true);
   };
+
+  if (user === undefined) window.location = "/mainPage";
 
   return (
     <ThemeProvider theme={theme}>
@@ -99,7 +100,7 @@ function App() {
                         path="/comment/create/:id"
                         component={CreateComment}
                       />
-                      {user.Role == "Admin" ? (
+                      {user.Role === "Admin" ? (
                         <Route path="/adminPage" component={adminPage} />
                       ) : (
                         <Redirect to="/mainPage" />

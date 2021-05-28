@@ -28,7 +28,7 @@ Router.post("/register", async (req, res) => {
       user.Email,
       user.ConfirmationToken
     );
-    console.log("email sent");
+
     const newUser = await user.save();
     //res.send({ user: user._id });
   } catch (err) {
@@ -57,7 +57,7 @@ Router.post("/login", async (req, res) => {
 
 Router.get("/init", async (req, res) => {
   const token = req.query.token;
-  console.log(token);
+
   if (token === undefined) return;
   const { _id } = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
   const user = await User.findById(_id);
@@ -139,14 +139,12 @@ Router.get(
       res.status(400).send("Wrong");
     }
 
-    console.log(user);
     ResponseFilter.setResponseDetails(res, 201);
   }
 );
 
 //Delete refreshtoken from DB => logout user
 Router.delete("/logout", async (req, res) => {
-  console.log(req.body.idUser);
   try {
     const deleteRefreshToken = await Token.deleteOne({
       idUser: req.body.idUser,
@@ -160,7 +158,6 @@ Router.delete("/logout", async (req, res) => {
 });
 
 Router.delete("/delete/:id", async (req, res) => {
-  console.log(req.params.id);
   try {
     const deleteUser = await User.deleteOne({
       Email: req.params.id,
